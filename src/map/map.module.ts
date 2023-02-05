@@ -12,5 +12,5 @@ import { MapService } from "./map.service";
     providers: [MapService]
 })
 export class MapModule{
-
+    
 }

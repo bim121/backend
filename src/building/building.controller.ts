@@ -1,5 +1,4 @@
 import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Query, Req, Res, UploadedFiles, UseInterceptors } from "@nestjs/common";
-import { FileFieldsInterceptor } from "@nestjs/platform-express";
 import { Building } from "../Schema/BuildingSchema.schema";
 import { BuildingService } from "./building.service";
 
