@@ -1,6 +1,7 @@
 import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
+import { Model, ObjectId } from "mongoose";
+import { CreateCityDto } from "src/dto/city-create-dto";
 import { City, CityDocument } from "../Schema/CitySchema.schema";
 
 @Injectable()
@@ -9,20 +10,24 @@ export class CityService {
     ) { }
 
 
-    async createCity(city: Object): Promise<City> {
-        const newCity = new this.cityModel(city);
+    async createCity(dto: CreateCityDto): Promise<City> {
+        const newCity = new this.cityModel({...dto});
         return newCity.save();
     }
 
 
-    async getAll(id): Promise<any> {
-        if (id.id) {
-            return this.cityModel.findOne({ _id: id.id }).populate("cityName").exec();
-        }
-        return this.cityModel.find().populate("cityName").exec();
+    async getAll(): Promise<City[]> {
+       const cities = await this.cityModel.find();
+       return cities;
     }
 
-    async delete(id): Promise<any> {
-        return await this.cityModel.findByIdAndRemove(id);
+    async getOne(id: ObjectId): Promise<City>{
+        const map = await this.cityModel.findById(id);
+        return map;
+    }
+
+    async delete(id: ObjectId): Promise<ObjectId> {
+        const map = await this.cityModel.findByIdAndDelete(id);
+        return map.id;
     }
 }

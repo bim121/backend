@@ -3,7 +3,7 @@ export type MapDocument = Map & Document;
 @Schema()
 export class Map {
     @Prop()
-    picrture: string;
+    name: string;
     @Prop()
     floorNumbers: number;
     @Prop()

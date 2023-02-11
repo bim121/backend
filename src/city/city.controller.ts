@@ -1,6 +1,8 @@
 import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Query, Req, Res, UploadedFiles, UseInterceptors } from "@nestjs/common";
 import { City } from "../Schema/CitySchema.schema";
+import { CreateCityDto } from "src/dto/city-create-dto";
 import { CityService } from "./city.service";
+import { ObjectId } from "mongoose";
 
 
 @Controller('/city')
@@ -8,24 +10,22 @@ export class CityController {
     constructor(private readonly cityServerice: CityService) { }
 
     @Post('/add')
-    async addCity(@Res() response, @Req() request, @Body() city: City) {
-        const requestBody = { description: request.city, cityName: request.city, countryName: request.city }
-        const newCity = await this.cityServerice.createCity(requestBody);
-        return response.status(HttpStatus.CREATED).json({
-            newCity
-        })
+    async addMap(@Body() dto: CreateCityDto) {
+        return this.cityServerice.createCity(dto);
     }
 
     @Get()
-    async getAll(@Query() id): Promise<Object> {
-        return await this.cityServerice.getAll(id);
+    getAll(){
+        return this.cityServerice.getAll();
     }
 
-    @Delete('/:id')
-    async delete(@Res() response, @Param('id') id) {
+    @Get(':id')
+    getOne(@Param('id') id: ObjectId){
+        return this.cityServerice.getOne(id);
+    }
+
+    @Delete(':id')
+    async delete(@Param('id') id: ObjectId) {
         await this.cityServerice.delete(id);
-        return response.status(HttpStatus.OK).json({
-            building: null
-        })
     }
 }

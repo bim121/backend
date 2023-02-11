@@ -1,6 +1,7 @@
 import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
+import { Model, ObjectId } from "mongoose";
+import { CreateMapDto } from "src/dto/map-create-dto";
 import { Map, MapDocument } from "../Schema/MapSchema.schema";
 
 @Injectable()
@@ -9,20 +10,24 @@ export class MapService {
     ) { }
 
 
-    async createMap(map: Object): Promise<Map> {
-        const newMap = new this.mapModel(map);
+    async createMap(dto: CreateMapDto): Promise<Map> {
+        const newMap = new this.mapModel({...dto});
         return newMap.save();
     }
 
 
-    async getAll(id): Promise<any> {
-        if (id.id) {
-            return this.mapModel.findOne({ _id: id.id }).populate("roomNumber").exec();
-        }
-        return this.mapModel.find().populate("roomNumber").exec();
+    async getAll(): Promise<Map[]> {
+       const maps = await this.mapModel.find();
+       return maps;
     }
 
-    async delete(id): Promise<any> {
-        return await this.mapModel.findByIdAndRemove(id);
+    async getOne(id: ObjectId): Promise<Map>{
+        const map = await this.mapModel.findById(id);
+        return map;
+    }
+
+    async delete(id: ObjectId): Promise<ObjectId> {
+        const map = await this.mapModel.findByIdAndDelete(id);
+        return map.id;
     }
 }
