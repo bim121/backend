@@ -22,12 +22,12 @@ export class CityService {
     }
 
     async getOne(id: ObjectId): Promise<City>{
-        const map = await this.cityModel.findById(id);
-        return map;
+        const city = await this.cityModel.findById(id);
+        return city;
     }
 
     async delete(id: ObjectId): Promise<ObjectId> {
-        const map = await this.cityModel.findByIdAndDelete(id);
-        return map.id;
+        const city = await this.cityModel.findByIdAndDelete(id);
+        return city.id;
     }
 }
