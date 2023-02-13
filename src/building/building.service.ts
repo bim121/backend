@@ -17,17 +17,17 @@ export class BuildingService {
 
 
     async getAll(): Promise<Building[]> {
-       const cities = await this.buildingModel.find();
-       return cities;
+       const buildings = await this.buildingModel.find();
+       return buildings;
     }
 
     async getOne(id: ObjectId): Promise<Building>{
-        const map = await this.buildingModel.findById(id);
-        return map;
+        const building = await this.buildingModel.findById(id);
+        return building;
     }
 
     async delete(id: ObjectId): Promise<ObjectId> {
-        const map = await this.buildingModel.findByIdAndDelete(id);
-        return map.id;
+        const building = await this.buildingModel.findByIdAndDelete(id);
+        return building.id;
     }
 }
