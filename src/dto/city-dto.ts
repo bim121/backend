@@ -1,5 +1,7 @@
+import { IsNotEmpty } from "class-validator";
+
 export class CreateCityDto{
-    readonly description: string;
-    readonly cityName: string;
-    readonly countryName: string;
+    @IsNotEmpty() description: string;
+    @IsNotEmpty() cityName: string;
+    @IsNotEmpty() countryName: string;
 }

@@ -1,11 +1,8 @@
 import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Model, ObjectId } from "mongoose";
 import { CreateMapDto } from "src/dto/map-dto";
 import { MapEntity } from "src/entity/map.entity";
 import { Repository } from "typeorm";
-import { Map, MapDocument } from "../Schema/MapSchema.schema";
 
 @Injectable()
 export class MapService {

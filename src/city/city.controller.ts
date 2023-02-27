@@ -1,17 +1,22 @@
 import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Query, Req, Res, UploadedFiles, UseInterceptors } from "@nestjs/common";
-import { City } from "../Schema/CitySchema.schema";
 import { CreateCityDto } from "src/dto/city-dto";
 import { CityService } from "./city.service";
-import { ObjectId } from "mongoose";
+import { BuildingService } from "src/building/building.service";
+import { CreateBuildingDto } from "src/dto/building-dto";
 
 
 @Controller('/city')
 export class CityController {
-    constructor(private readonly cityServerice: CityService) { }
+    constructor(private readonly cityServerice: CityService, private readonly buidlingService: BuildingService) { }
 
     @Post('/add')
-    async addMap(@Body() dto: CreateCityDto) {
+    async addCity(@Body() dto: CreateCityDto) {
         return this.cityServerice.createCity(dto);
+    }
+
+    @Post('/building')
+    async addBuilding(@Body() dto: CreateBuildingDto) {
+        return this.cityServerice.addBuilding(dto);
     }
 
     @Get()
@@ -20,12 +25,12 @@ export class CityController {
     }
 
     @Get(':id')
-    getOne(@Param('id') id: ObjectId){
+    getOne(@Param('id') id: string){
         return this.cityServerice.getOne(id);
     }
 
     @Delete(':id')
-    async delete(@Param('id') id: ObjectId) {
-        await this.cityServerice.delete(id);
+    async delete(@Param('id') id: string) {
+        return this.cityServerice.delete(id);
     }
 }

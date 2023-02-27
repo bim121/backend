@@ -5,7 +5,7 @@ import { CreateMapDto } from "src/dto/map-dto";
 import { BuildingEntity } from "src/entity/building.entity";
 import { MapEntity } from "src/entity/map.entity";
 import { MapService } from "src/map/map.service";
-import { getRepository, Repository } from "typeorm";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class BuildingService {
@@ -14,9 +14,9 @@ export class BuildingService {
         private readonly buildingRepo: Repository<BuildingEntity>, 
         @InjectRepository(MapEntity) private readonly mapRepo: Repository<MapEntity>, private readonly mapService: MapService) {}
 
-    async createBuilding(buildingDto: CreateBuildingDto): Promise<CreateBuildingDto> {    
-        const { description, buildingName, streetName } = buildingDto;
-        
+    async createBuilding(buildingDto: CreateBuildingDto): Promise<BuildingEntity> {    
+        const { description, buildingName, streetName, cityName } = buildingDto;
+
         const buidlingInDb = await this.buildingRepo.findOne({ 
             where: { buildingName } 
         });
@@ -25,7 +25,7 @@ export class BuildingService {
             throw new HttpException('Budiling already exists', HttpStatus.BAD_REQUEST);    
         }
         
-        const building: BuildingEntity = await this.buildingRepo.create({ description, buildingName, streetName });
+        const building: BuildingEntity = await this.buildingRepo.create({ description, buildingName, streetName, cityName });
         await this.buildingRepo.save(building);
         return building;  
     }
@@ -44,6 +44,7 @@ export class BuildingService {
     }
 
     async getOne(id: string): Promise<BuildingEntity> {
+        
         return await this.buildingRepo.findOne({
             where: {
                 id

@@ -1,5 +1,4 @@
 import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Query, Req, Res, UploadedFiles, UseInterceptors } from "@nestjs/common";
-import { CreateBuildingDto } from "src/dto/building-dto";
 import { CreateMapDto } from "src/dto/map-dto";
 import { MapService } from "./map.service";
 

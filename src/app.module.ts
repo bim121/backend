@@ -1,10 +1,8 @@
 import { Module } from "@nestjs/common";
-import { UserModule } from "./user/user.module";
 import { MongooseModule } from '@nestjs/mongoose';
 import { MapModule } from "./map/map.module";
 import { CityModule } from "./city/city.module";
 import { BuildingModule } from "./building/building.module";
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import {TypeOrmModule} from '@nestjs/typeorm';
 import entities from './typeorm/entities';
 import { AuthModule } from "./Auth/auth.module";
