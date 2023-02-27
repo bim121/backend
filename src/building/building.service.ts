@@ -5,7 +5,7 @@ import { CreateMapDto } from "src/dto/map-dto";
 import { BuildingEntity } from "src/entity/building.entity";
 import { MapEntity } from "src/entity/map.entity";
 import { MapService } from "src/map/map.service";
-import { Repository } from "typeorm";
+import { getRepository, Repository } from "typeorm";
 
 @Injectable()
 export class BuildingService {
