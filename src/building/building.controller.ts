@@ -9,7 +9,7 @@ import { BuildingService } from "./building.service";
 export class BuildingController {
     constructor(private readonly buildingServerice: BuildingService) { }
 
-    @Post('/add')
+    @Post()
     async addBuilding(@Body() dto: CreateBuildingDto) {
         return this.buildingServerice.createBuilding(dto);
     }

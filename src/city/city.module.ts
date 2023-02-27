@@ -12,6 +12,6 @@ import { CityService } from "./city.service";
     controllers: [CityController],
     providers: [CityService]
 })
-export class BuildingModule{
+export class CityModule{
 
 }

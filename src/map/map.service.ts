@@ -9,12 +9,10 @@ export class MapService {
     constructor(@InjectModel(Map.name) private mapModel: Model<MapDocument>,
     ) { }
 
-
     async createMap(dto: CreateMapDto): Promise<Map> {
         const newMap = new this.mapModel({...dto});
         return newMap.save();
     }
-
 
     async getAll(): Promise<Map[]> {
        const maps = await this.mapModel.find();

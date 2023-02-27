@@ -9,12 +9,10 @@ export class BuildingService {
     constructor(@InjectModel(Building.name) private buildingModel: Model<BuildingDocument>,
     ) { }
 
-
     async createBuilding(dto: CreateBuildingDto): Promise<Building> {
         const newBuilding = new this.buildingModel({...dto});
         return newBuilding.save();
     }
-
 
     async getAll(): Promise<Building[]> {
        const buildings = await this.buildingModel.find();

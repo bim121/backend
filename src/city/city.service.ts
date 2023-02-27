@@ -9,12 +9,10 @@ export class CityService {
     constructor(@InjectModel(City.name) private cityModel: Model<CityDocument>,
     ) { }
 
-
     async createCity(dto: CreateCityDto): Promise<City> {
         const newCity = new this.cityModel({...dto});
         return newCity.save();
     }
-
 
     async getAll(): Promise<City[]> {
        const cities = await this.cityModel.find();
@@ -26,8 +24,8 @@ export class CityService {
         return city;
     }
 
-    async delete(id: ObjectId): Promise<ObjectId> {
-        const city = await this.cityModel.findByIdAndDelete(id);
-        return city.id;
+    async delete(cid: ObjectId): Promise<ObjectId> {
+        let {id} = await this.cityModel.findByIdAndDelete(cid);
+        return id;
     }
 }
