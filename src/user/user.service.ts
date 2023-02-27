@@ -1,54 +1,53 @@
 import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
-import { User, UserDocument } from "../Schema/UserSchema.schema";
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-
-const users = [];
-
-const generateID = () => Math.random().toString(36).substring(2, 10);
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { UserEntity } from '../entity/user.entity';
+import { UserDto } from "src/dto/user/user-dto";
+import { toUserDto } from "src/shared/mapper";
+import { LoginUserDto } from "src/dto/user/user-login-dto";
+import { CreateUserDto } from "src/dto/user/user-create-dto";
 
 @Injectable()
 export class UserService {
-    constructor(@InjectModel(User.name) private userModel: Model<UserDocument>,
-    ) { }
-
-    async signup(user: User): Promise<User> {
-        const salt = await bcrypt.genSalt();
-        const hash = await bcrypt.hash(user.password, salt);
-        const reqBody = {
-            username: user.username,
-            email: user.email,
-            password: hash
-        }
-        const newUser = new this.userModel(reqBody);
-        return newUser.save();
+    constructor(
+        @InjectRepository(UserEntity)    
+        private readonly userRepo: Repository<UserEntity>, ) {}
+    
+    async findOne(options?: object): Promise<UserDto> {
+        const user =  await this.userRepo.findOne(options);    
+        return toUserDto(user);  
     }
-
-    async signin(user: User, jwt: JwtService): Promise<any> {
-        const foundUser = await this.userModel.findOne({ email: user.email }).exec();
-        if (foundUser) {
-            const { password } = foundUser;
-            if (bcrypt.compare(user.password, password)) {
-                const payload = { email: user.email };
-                return {
-                    token: jwt.sign(payload),
-                };
-            }
-            return new HttpException('Incorrect username or password', HttpStatus.UNAUTHORIZED)
-        }
-        return new HttpException('Incorrect username or password', HttpStatus.UNAUTHORIZED)
-    }
-
-    async getAll(){
-    }
-
-    async getOne(email): Promise<User> {
-        return await this.userModel.findOne({ email }).exec();
-    }
-
-    async delete(){
+   
+    async findByLogin({ username, password }: LoginUserDto): Promise<UserDto> {    
+        const user = await this.userRepo.findOne({ where: { username } });
         
+        if (!user) {
+            throw new HttpException('User not found',  HttpStatus.UNAUTHORIZED);    
+        }
+         
+        
+        return toUserDto(user);  
+    }
+
+    async findByPayload({ username }: any): Promise<UserDto> {
+        return await this.findOne({ 
+            where:  { username } });  
+    }
+
+    async create(userDto: CreateUserDto): Promise<UserDto> {    
+        const { username, password, email } = userDto;
+        
+        const userInDb = await this.userRepo.findOne({ 
+            where: { username } 
+        });
+        if (userInDb) {
+            throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);    
+        }
+        
+        const user: UserEntity = await this.userRepo.create({ username, password, email, });
+        await this.userRepo.save(user);
+        return toUserDto(user);  
     }
 }
