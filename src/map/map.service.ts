@@ -1,31 +1,44 @@
 import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
+import { InjectRepository } from "@nestjs/typeorm";
 import { Model, ObjectId } from "mongoose";
-import { CreateMapDto } from "src/dto/map-create-dto";
+import { CreateMapDto } from "src/dto/map-dto";
+import { MapEntity } from "src/entity/map.entity";
+import { Repository } from "typeorm";
 import { Map, MapDocument } from "../Schema/MapSchema.schema";
 
 @Injectable()
 export class MapService {
-    constructor(@InjectModel(Map.name) private mapModel: Model<MapDocument>,
-    ) { }
+    constructor(
+        @InjectRepository(MapEntity)    
+        private readonly mapRepo: Repository<MapEntity>, ) {}
 
-    async createMap(dto: CreateMapDto): Promise<Map> {
-        const newMap = new this.mapModel({...dto});
-        return newMap.save();
+    async createMap(mapDto: CreateMapDto): Promise<MapEntity> {    
+        const {  name, floorNumber, roomNumber, buildingName} = mapDto;
+        
+        const buidlingInDb = await this.mapRepo.findOne({ 
+            where: { name } 
+        });
+
+        if (buidlingInDb) {
+            throw new HttpException('Map already exists', HttpStatus.BAD_REQUEST);    
+        }
+        
+        const map: MapEntity = await this.mapRepo.create({ name, floorNumber, roomNumber, buildingName });
+        await this.mapRepo.save(map);
+        return map;  
     }
 
-    async getAll(): Promise<Map[]> {
-       const maps = await this.mapModel.find();
-       return maps;
+    async getAll(): Promise<MapEntity[]> {
+        return this.mapRepo.find();
     }
 
-    async getOne(id: ObjectId): Promise<Map>{
-        const map = await this.mapModel.findById(id);
-        return map;
+    async getOne(id: string): Promise<MapEntity> {
+        return this.mapRepo.findOneBy({ id });
     }
 
-    async delete(id: ObjectId): Promise<ObjectId> {
-        const map = await this.mapModel.findByIdAndDelete(id);
-        return map.id;
+    async delete(id: string): Promise<void> {
+        await this.mapRepo.delete({id});
     }
+
 }

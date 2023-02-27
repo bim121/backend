@@ -1,7 +1,7 @@
 import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, ObjectId } from "mongoose";
-import { CreateCityDto } from "src/dto/city-create-dto";
+import { CreateCityDto } from "src/dto/city-dto";
 import { City, CityDocument } from "../Schema/CitySchema.schema";
 
 @Injectable()

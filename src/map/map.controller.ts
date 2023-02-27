@@ -1,8 +1,6 @@
 import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Query, Req, Res, UploadedFiles, UseInterceptors } from "@nestjs/common";
-import { FileFieldsInterceptor } from "@nestjs/platform-express";
-import { ObjectId } from "mongoose";
-import { CreateMapDto } from "src/dto/map-create-dto";
-import { Map } from "../Schema/MapSchema.schema";
+import { CreateBuildingDto } from "src/dto/building-dto";
+import { CreateMapDto } from "src/dto/map-dto";
 import { MapService } from "./map.service";
 
 
@@ -11,7 +9,7 @@ export class MapController {
     constructor(private readonly mapServerice: MapService) { }
 
     @Post('/add')
-    async addMap(@Body() dto: CreateMapDto) {
+    async addBuilding(@Body() dto: CreateMapDto) {
         return this.mapServerice.createMap(dto);
     }
 
@@ -21,12 +19,12 @@ export class MapController {
     }
 
     @Get(':id')
-    getOne(@Param('id') id: ObjectId){
+    getOne(@Param('id') id: string){
         return this.mapServerice.getOne(id);
     }
 
     @Delete(':id')
-    async delete(@Param('id') id: ObjectId) {
-        await this.mapServerice.delete(id);
+    async delete(@Param('id') id: string) {
+        return this.mapServerice.delete(id);
     }
 }

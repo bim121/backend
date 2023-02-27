@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Query, Req, Res, UploadedFiles, UseInterceptors } from "@nestjs/common";
 import { City } from "../Schema/CitySchema.schema";
-import { CreateCityDto } from "src/dto/city-create-dto";
+import { CreateCityDto } from "src/dto/city-dto";
 import { CityService } from "./city.service";
 import { ObjectId } from "mongoose";
 
