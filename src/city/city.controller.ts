@@ -3,6 +3,7 @@ import { CreateCityDto } from "src/dto/city-dto";
 import { CityService } from "./city.service";
 import { BuildingService } from "src/building/building.service";
 import { CreateBuildingDto } from "src/dto/building-dto";
+import { SearchMapDto } from "src/dto/search-map-dto";
 
 
 @Controller('/city')
@@ -27,6 +28,11 @@ export class CityController {
     @Get(':id')
     getOne(@Param('id') id: string){
         return this.cityServerice.getOne(id);
+    }
+
+    @Post('/search')
+    searchMap(@Body() dto: SearchMapDto){
+        return this.cityServerice.searchMap(dto);
     }
 
     @Delete(':id')
