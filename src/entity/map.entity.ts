@@ -25,6 +25,11 @@ export class MapEntity {
         nullable: false 
     })  
     buildingName: string;
+    @Column({ 
+        type: 'varchar', 
+        nullable: false 
+    })  
+    picturePath: string;
     @ManyToOne(type => BuildingEntity, building => building.maps)
     building: BuildingEntity;
 }

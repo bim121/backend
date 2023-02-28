@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Query, Req, Res, UploadedFiles, UseInterceptors } from "@nestjs/common";
+import { FileFieldsInterceptor } from "@nestjs/platform-express";
 import { CreateBuildingDto } from "src/dto/building-dto";
 import { CreateMapDto } from "src/dto/map-dto";
 import { MapService } from "src/map/map.service";
@@ -15,8 +16,12 @@ export class BuildingController {
     }
 
     @Post('/map')
-    async addMap(@Body() dto: CreateMapDto) {
-        return this.buildingServerice.addMap(dto);
+    @UseInterceptors(FileFieldsInterceptor([
+        { name: 'picture', maxCount: 1 }
+    ]))
+    async addMap(@UploadedFiles() files, @Body() dto: CreateMapDto) {
+        const {picture} = files;
+        return this.buildingServerice.addMap(dto, picture[0]);
     }
 
     @Get()

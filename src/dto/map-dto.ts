@@ -5,4 +5,5 @@ export class CreateMapDto{
     @IsNotEmpty()floorNumber: number;
     @IsNotEmpty() roomNumber: string;
     @IsNotEmpty() buildingName:string;
+    @IsNotEmpty() picture: string;
 }
