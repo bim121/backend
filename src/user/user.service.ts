@@ -5,6 +5,7 @@ import { UserEntity } from '../entity/user.entity';
 import { UserDto } from "src/dto/user/user-dto";
 import { toUserDto } from "src/shared/mapper";
 import { LoginUserDto } from "src/dto/user/user-login-dto";
+import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from "src/dto/user/user-create-dto";
 
 @Injectable()
@@ -24,7 +25,12 @@ export class UserService {
         if (!user) {
             throw new HttpException('User not found',  HttpStatus.UNAUTHORIZED);    
         }
-         
+        
+        const isMatch = await bcrypt.compare(password, user.password);
+    
+        if (!isMatch) {
+            throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);    
+        }
         
         return toUserDto(user);  
     }

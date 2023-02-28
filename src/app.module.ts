@@ -12,7 +12,8 @@ import { FileModule } from "./file/file.module";
 
 @Module({
     imports: [
-      ServeStaticModule.forRoot({rootPath: path.resolve(__dirname, 'static')}),
+      ServeStaticModule.forRoot({rootPath: path.resolve(__dirname, '..', 'public')}),
+      
       TypeOrmModule.forRoot({
         type: 'postgres',
         host: 'localhost',
