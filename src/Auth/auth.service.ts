@@ -42,7 +42,7 @@ export class AuthService {
         };  
     }
     
-    private _createToken({ username }: UserDto): any {
+    private _createToken({ username }: UserDto): any { //refactor any to interface
         const user: JwtPayload = { username };    
         const accessToken = this.jwtService.sign(user);    
         return {

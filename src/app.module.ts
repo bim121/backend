@@ -23,7 +23,6 @@ import { FileModule } from "./file/file.module";
         entities: entities,
         synchronize: true,
       }),
-        MongooseModule.forRoot('mongodb+srv://bim121:admin@cluster0.ezwkcaw.mongodb.net/?retryWrites=true&w=majority'),
         AuthModule,
         MapModule,
         CityModule,

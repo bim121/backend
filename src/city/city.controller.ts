@@ -1,9 +1,10 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Query, Req, Res, UploadedFiles, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Query, Req, Res, UploadedFiles, UseGuards, UseInterceptors } from "@nestjs/common";
 import { CreateCityDto } from "src/dto/city-dto";
 import { CityService } from "./city.service";
 import { BuildingService } from "src/building/building.service";
 import { CreateBuildingDto } from "src/dto/building-dto";
 import { SearchMapDto } from "src/dto/search-map-dto";
+import { AuthGuard } from "@nestjs/passport";
 
 
 @Controller('/city')
@@ -11,6 +12,7 @@ export class CityController {
     constructor(private readonly cityServerice: CityService, private readonly buidlingService: BuildingService) { }
 
     @Post('/add')
+    @UseGuards(AuthGuard())
     async addCity(@Body() dto: CreateCityDto) {
         return this.cityServerice.createCity(dto);
     }

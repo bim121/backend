@@ -7,6 +7,7 @@ import { toUserDto } from "src/shared/mapper";
 import { LoginUserDto } from "src/dto/user/user-login-dto";
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from "src/dto/user/user-create-dto";
+import { JwtPayload } from "src/Auth/jwt.strategy";
 
 @Injectable()
 export class UserService {
@@ -35,7 +36,7 @@ export class UserService {
         return toUserDto(user);  
     }
 
-    async findByPayload({ username }: any): Promise<UserDto> {
+    async findByPayload({ username }: JwtPayload): Promise<UserDto> { 
         return await this.findOne({ 
             where:  { username } });  
     }
@@ -47,7 +48,7 @@ export class UserService {
             where: { username } 
         });
         if (userInDb) {
-            throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);    
+            throw new HttpException('User already exists', HttpStatus.BAD_REQUEST); //refactor exception   
         }
         
         const user: UserEntity = await this.userRepo.create({ username, password, email, });

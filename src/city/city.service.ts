@@ -1,4 +1,5 @@
-import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
+import { Injectable, HttpException, HttpStatus, UseGuards } from "@nestjs/common";
+import { AuthGuard } from "@nestjs/passport";
 import { InjectRepository } from "@nestjs/typeorm";
 import { BuildingService } from "src/building/building.service";
 import { CreateBuildingDto } from "src/dto/building-dto";
