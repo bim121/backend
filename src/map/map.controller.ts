@@ -8,6 +8,8 @@ import { MapService } from "./map.service";
 export class MapController {
     constructor(private readonly mapServerice: MapService) { }
 
+    @ApiOperation({summary: 'Додавання мапи'})
+    @ApiResponse({status: 200})
     @Post('/add')
     @UseInterceptors(FileFieldsInterceptor([
         { name: 'picture', maxCount: 1 },
@@ -17,16 +19,22 @@ export class MapController {
         return this.mapServerice.createMap(dto, picture[0]);
     }
 
+    @ApiOperation({summary: 'Отримання усіх мап'})
+    @ApiResponse({status: 200})
     @Get()
     getAll(){
         return this.mapServerice.getAll();
     }
 
+    @ApiOperation({summary: 'Отримання певної мапи'})
+    @ApiResponse({status: 200})
     @Get(':id')
     getOne(@Param('id') id: string){
         return this.mapServerice.getOne(id);
     }
 
+    @ApiOperation({summary: 'Видалення мапи'})
+    @ApiResponse({status: 200})
     @Delete(':id')
     async delete(@Param('id') id: string) {
         return this.mapServerice.delete(id);
