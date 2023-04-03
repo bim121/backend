@@ -1,4 +1,4 @@
-import { Body, Controller, HttpException, HttpStatus, Post } from "@nestjs/common";
+import { Body, Controller, Get, HttpException, HttpStatus, Param, Post } from "@nestjs/common";
 import { CreateUserDto } from "src/dto/user/user-create-dto";
 import { LoginUserDto } from "src/dto/user/user-login-dto";
 import { AuthService, LoginStatus, RegistrationStatus } from "./auth.service";
@@ -26,4 +26,10 @@ export class AuthController {
         public async login(@Body() loginUserDto: LoginUserDto): Promise<LoginStatus> {
             return await this.authService.login(loginUserDto);  
         }
+
+        @Get(':id')
+        getOne(@Param('id') id: number){
+            return this.authService.getOne(id);
+        }
+    
 }

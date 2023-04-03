@@ -8,12 +8,14 @@ import { LoginUserDto } from "src/dto/user/user-login-dto";
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from "src/dto/user/user-create-dto";
 import { JwtPayload } from "src/Auth/jwt.strategy";
+import { RolesService } from "src/Roles/roles.services";
 
 @Injectable()
 export class UserService {
     constructor(
         @InjectRepository(UserEntity)    
-        private readonly userRepo: Repository<UserEntity>, ) {}
+        private readonly userRepo: Repository<UserEntity>,
+        private roleService: RolesService ) {}
     
     async findOne(options?: object): Promise<UserDto> {
         const user =  await this.userRepo.findOne(options);    
@@ -51,7 +53,10 @@ export class UserService {
             throw new HttpException('User already exists', HttpStatus.BAD_REQUEST); //refactor exception   
         }
         
+        
         const user: UserEntity = await this.userRepo.create({ username, password, email, });
+        const role = await this.roleService.getRoleByValue("USER");
+        user.roles.push(role)
         await this.userRepo.save(user);
         return toUserDto(user);  
     }

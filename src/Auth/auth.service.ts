@@ -13,7 +13,8 @@ import { JwtPayload } from "./jwt.strategy";
 
 @Injectable()
 export class AuthService {
-    constructor(private readonly usersService: UserService, private readonly jwtService: JwtService,  ) {
+    constructor(private readonly usersService: UserService, private readonly jwtService: JwtService,   @InjectRepository(UserEntity)    
+    private readonly userRepo: Repository<UserEntity>) {
         
     }
     async register(userDto: CreateUserDto): Promise<RegistrationStatus> {
@@ -58,8 +59,22 @@ export class AuthService {
         }    
         return user;  
     }
+
     
+    async getOne(id: number): Promise<UserEntity> {
+        
+        return await this.userRepo.findOne({
+            where: {
+                id
+            },
+            relations: {
+                roles: true,
+            },
+        })
+    }
 }
+
+
 
 export interface RegistrationStatus {  
     success: boolean;  
