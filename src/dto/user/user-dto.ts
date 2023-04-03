@@ -4,7 +4,7 @@ import { IsEmail, IsNotEmpty } from "class-validator";
 export class UserDto {  
     @IsNotEmpty()
     @ApiProperty({example: '1', description: "Унікальний номер"})
-    id: string;
+    id: number;
     @IsNotEmpty()
     @ApiProperty({example: 'sdfgdg', description: "Ім'я користувача"})  
     username: string;

@@ -1,10 +1,12 @@
-import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, ManyToMany, JoinTable } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { ApiProperty } from '@nestjs/swagger';
+import { RolesEntity } from './roles.entity';
 
 @Entity('user')
 export class UserEntity {  
-    @PrimaryGeneratedColumn('uuid') id: string;  
+  @PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })
+  id: number;
     @ApiProperty({example: '1', description: 'Уникальный индетификатор'})
     @Column({ 
         type: 'varchar', 
@@ -29,4 +31,22 @@ export class UserEntity {
     @BeforeInsert()  async hashPassword() {
         this.password = await bcrypt.hash(this.password, 10);  
     }
+
+    @ManyToMany(
+        () => RolesEntity,
+        role => role.users,
+        {onDelete: 'NO ACTION', onUpdate: 'NO ACTION',},
+      )
+      @JoinTable({
+        name: 'user_role',
+        joinColumn: {
+          name: 'user_id',
+          referencedColumnName: 'id',
+        },
+        inverseJoinColumn: {
+          name: 'role_id',
+          referencedColumnName: 'id',
+        },
+      })
+      roles?: RolesEntity[];
 }
