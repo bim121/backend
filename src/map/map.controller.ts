@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Query, Req, Res
 import { FileFieldsInterceptor } from "@nestjs/platform-express";
 import { CreateMapDto } from "src/dto/map-dto";
 import { MapService } from "./map.service";
+import { ApiOperation, ApiResponse } from "@nestjs/swagger";
 
 
 @Controller('/map')

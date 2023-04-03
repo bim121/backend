@@ -4,20 +4,21 @@ import { CreateBuildingDto } from "src/dto/building-dto";
 import { CreateMapDto } from "src/dto/map-dto";
 import { MapService } from "src/map/map.service";
 import { BuildingService } from "./building.service";
+import { ApiOperation, ApiResponse } from "@nestjs/swagger";
 
 
 @Controller('/building')
 export class BuildingController {
     constructor(private readonly buildingServerice: BuildingService, private readonly mapService: MapService) { }
 
-    @ApiOperation({summary: 'Додавання мапи будівлі'})
+    @ApiOperation({summary: 'Додавання будівлі'})
     @ApiResponse({status: 200})
     @Post('/add')
     async addBuilding(@Body() dto: CreateBuildingDto) {
         return this.buildingServerice.createBuilding(dto);
     }
 
-    @ApiOperation({summary: '???'})
+    @ApiOperation({summary: 'Додавання мапи будівл'})
     @ApiResponse({status: 200})
     @Post('/map')
     @UseInterceptors(FileFieldsInterceptor([
