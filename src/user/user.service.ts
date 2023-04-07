@@ -25,6 +25,7 @@ export class UserService {
     async findByLogin({ username, password }: LoginUserDto): Promise<UserDto> {    
         const user = await this.userRepo.findOne({ where: { username } });
         
+        
         if (!user) {
             throw new HttpException('User not found',  HttpStatus.UNAUTHORIZED);    
         }
@@ -53,11 +54,21 @@ export class UserService {
             throw new HttpException('User already exists', HttpStatus.BAD_REQUEST); //refactor exception   
         }
         
-        
         const user: UserEntity = await this.userRepo.create({ username, password, email, });
         const role = await this.roleService.getRoleByValue("USER");
-        user.roles.push(role)
         await this.userRepo.save(user);
-        return toUserDto(user);  
+
+        const u = await this.userRepo.findOne({  
+            where: {
+                username
+            },
+            relations: {
+                roles: true,
+            }, 
+        });
+
+        u.roles.push(role)
+        await this.userRepo.save(u);
+        return toUserDto(u);  
     }
 }

@@ -6,6 +6,8 @@ import { CreateBuildingDto } from "src/dto/building-dto";
 import { SearchMapDto } from "src/dto/search-map-dto";
 import { AuthGuard } from "@nestjs/passport";
 import { ApiOperation, ApiResponse } from "@nestjs/swagger";
+import { Roles } from "src/Auth/roles-auth.decorator";
+import { RolesGuard } from "src/Auth/roles.guard";
 
 
 @Controller('/city')
@@ -15,7 +17,8 @@ export class CityController {
     @ApiOperation({summary: 'Додавання міста'})
     @ApiResponse({status: 200})
     @Post('/add')
-    @UseGuards(AuthGuard())
+    @Roles("USER")
+    @UseGuards(RolesGuard)
     async addCity(@Body() dto: CreateCityDto) {
         return this.cityServerice.createCity(dto);
     }

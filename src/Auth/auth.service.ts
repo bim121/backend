@@ -10,6 +10,7 @@ import { LoginUserDto } from "src/dto/user/user-login-dto";
 import { CreateUserDto } from "src/dto/user/user-create-dto";
 import { UserService } from "src/user/user.service";
 import { JwtPayload } from "./jwt.strategy";
+import { RolesEntity } from "src/entity/roles.entity";
 
 @Injectable()
 export class AuthService {
@@ -36,15 +37,30 @@ export class AuthService {
     async login(loginUserDto: LoginUserDto): Promise<LoginStatus> {    
         const user = await this.usersService.findByLogin(loginUserDto);
          
-        const token = this._createToken(user);
+        const username = loginUserDto.username
+
+        const u = await this.userRepo.findOne({  
+            where: {
+                username
+            },
+            relations: {
+                roles: true,
+            }, 
+        });
+
+        const roles = u.roles;
+        
+        
+        const token = this._createToken(user, roles);
         
         return {
             username: user.username, ...token,    
         };  
     }
     
-    private _createToken({ username }: UserDto): any { //refactor any to interface
-        const user: JwtPayload = { username };    
+    private _createToken({ username }: UserDto, roles: RolesEntity[]): any { //refactor any to interface
+        
+        const user: JwtPayload = { username, roles };    
         const accessToken = this.jwtService.sign(user);    
         return {
             expiresIn: '1800s',

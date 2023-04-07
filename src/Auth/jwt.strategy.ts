@@ -4,6 +4,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { secret } from 'src/constant';
 import { UserDto } from 'src/dto/user/user-dto';
 import { AuthService } from './auth.service';
+import { RolesEntity } from 'src/entity/roles.entity';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) { 
@@ -23,4 +24,4 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     }
 }
 
-export interface JwtPayload {  username: string;}
+export interface JwtPayload {  username: string, roles: RolesEntity[]}
