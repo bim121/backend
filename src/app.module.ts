@@ -14,7 +14,8 @@ import { ConfigModule } from "@nestjs/config";
 @Module({
     imports: [
       ConfigModule.forRoot({
-        envFilePath: '.env'
+        envFilePath: '.env',
+        isGlobal: true
       }),
       ServeStaticModule.forRoot({rootPath: path.resolve(__dirname, 'static')}),
       TypeOrmModule.forRoot({
@@ -25,7 +26,8 @@ import { ConfigModule } from "@nestjs/config";
         password: process.env.POSTGRES_PASSWORD,
         database: process.env.POSTGRES_DB,
         entities: entities,
-        synchronize: true,
+        synchronize: false,
+        migrations: ['src/migrations/*.ts'],
       }),
         AuthModule,
         MapModule,

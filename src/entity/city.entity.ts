@@ -1,6 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, OneToMany, ManyToOne } from 'typeorm';
 import { BuildingEntity } from './building.entity';
 import { ApiProperty } from '@nestjs/swagger';
+import { CountryEntity } from './сountry.entity';
 
 @Entity('city')
 export class CityEntity {  
@@ -27,5 +28,6 @@ export class CityEntity {
     cityName: string;
     @OneToMany( type => BuildingEntity , building => building.city)
     buildings: Array<BuildingEntity>;
-    
+    @ManyToOne(type => CountryEntity, country => country.cities)
+    country: CountryEntity;
 }
