@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class  $npmConfigName1681497308892 implements MigrationInterface {
-    name = ' $npmConfigName1681497308892'
+export class  $npmConfigName1681499469950 implements MigrationInterface {
+    name = ' $npmConfigName1681499469950'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`ALTER TABLE "country" ADD "location" character varying NOT NULL`);

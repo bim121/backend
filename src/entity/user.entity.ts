@@ -1,7 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert} from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { ApiProperty } from '@nestjs/swagger';
-import { RolesEntity } from './roles.entity';
+import Role from '../enum/role.enum';
 
 @Entity('user')
 export class UserEntity {  
@@ -27,26 +27,14 @@ export class UserEntity {
     }) 
     @ApiProperty({example: 'dgfdg@gmail.com', description: 'Емеіл користувача'}) 
     email: string;
+    @Column({
+      type: 'enum',
+      enum: Role,
+      default: [Role.User]
+    })
+    public roles: Role[]
     
     @BeforeInsert()  async hashPassword() {
         this.password = await bcrypt.hash(this.password, 10);  
     }
-
-    @ManyToMany(
-        () => RolesEntity,
-        role => role.users,
-        {onDelete: 'NO ACTION', onUpdate: 'NO ACTION',},
-      )
-      @JoinTable({
-        name: 'user_role',
-        joinColumn: {
-          name: 'user_id',
-          referencedColumnName: 'id',
-        },
-        inverseJoinColumn: {
-          name: 'role_id',
-          referencedColumnName: 'id',
-        },
-      })
-      roles?: RolesEntity[];
 }

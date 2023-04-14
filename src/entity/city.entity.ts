@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, OneToMany, ManyToOne } from 'typeorm';
 import { BuildingEntity } from './building.entity';
 import { ApiProperty } from '@nestjs/swagger';
-import { CountryEntity } from './сountry.entity';
+import { CountryEntity } from './country.entity';
 
 @Entity('city')
 export class CityEntity {  
