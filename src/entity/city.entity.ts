@@ -14,7 +14,7 @@ export class CityEntity {
         unique: true 
     }) 
     countryName: string;
-    @ApiProperty({example: 'Ukraine is a center of Europe', description: 'Опис міста'})
+    @ApiProperty({example: 'Odessa is a touristic city', description: 'Опис міста'})
     @Column({ 
         type: 'varchar', 
         nullable: false 

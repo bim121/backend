@@ -26,7 +26,7 @@ import { ConfigModule } from "@nestjs/config";
         password: process.env.POSTGRES_PASSWORD,
         database: process.env.POSTGRES_DB,
         entities: entities,
-        synchronize: false,
+        synchronize: true,
         migrations: ['src/migrations/*.ts'],
       }),
         AuthModule,

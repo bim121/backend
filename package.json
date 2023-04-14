@@ -42,7 +42,7 @@
     "sequelize": "^6.30.0",
     "sequelize-typescript": "^2.1.5",
     "swagger-ui-express": "^4.6.2",
-    "typeorm": "^0.3.12"
+    "typeorm": "^0.3.14"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",

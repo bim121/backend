@@ -13,12 +13,18 @@ export class CountryEntity {
         unique: true 
     }) 
     countryName: string;
-    @ApiProperty({example: 'Ukraine is a center of Europe', description: 'Опис міста'})
+    @ApiProperty({example: 'Ukraine it is country which named heart of Europe', description: 'Опис країни'})
     @Column({ 
         type: 'varchar', 
         nullable: false 
     }) 
     description: string;
+    @ApiProperty({example: 'Ukraine is a center of Europe', description: 'Локація міста'})
+    @Column({ 
+        type: 'varchar', 
+        nullable: false 
+    }) 
+    location: string;
     @OneToMany( type => CityEntity , city => city.country)
     cities: Array<CityEntity>;
     
