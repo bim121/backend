@@ -1,5 +1,4 @@
 import { Injectable, HttpException, HttpStatus, UseGuards } from "@nestjs/common";
-import { AuthGuard } from "@nestjs/passport";
 import { InjectRepository } from "@nestjs/typeorm";
 import { BuildingService } from "src/building/building.service";
 import { CreateBuildingDto } from "src/dto/building-dto";
@@ -16,9 +15,9 @@ export class CityService {
         @InjectRepository(CityEntity)    
         private readonly cityRepo: Repository<CityEntity>, 
         @InjectRepository(BuildingEntity) private readonly buildingRepo: Repository<BuildingEntity>,
-        @InjectRepository(MapEntity) private readonly mapRepo: Repository<MapEntity>, private readonly buildingService: BuildingService) {}
+         private readonly buildingService: BuildingService) {}
 
-    async createCity(cityDto: CreateCityDto): Promise<CreateCityDto> {    
+    async createCity(cityDto: CreateCityDto): Promise<CityEntity> {    
         const { description, countryName, cityName } = cityDto;
 
         const cityInDb = await this.cityRepo.findOne({ 
@@ -60,7 +59,7 @@ export class CityService {
     }
 
     async delete(id: string): Promise<void> {
-        await this.buildingRepo.delete({id});
+        await this.cityRepo.delete({id});
     }
 
     async searchMap(dto: SearchMapDto): Promise<MapEntity>{

@@ -16,19 +16,16 @@ export class BuildingEntity {
     @ApiProperty({example: 'CityCenter', description: 'Название будівлі'})
     @Column({ 
         type: 'varchar', 
-        nullable: false 
     }) 
     description: string;  
     @ApiProperty({example: 'town on the south of Ukraine', description: 'Опис міста'})
     @Column({ 
         type: 'varchar', 
-        nullable: false 
     })  
     streetName: string;
     @ApiProperty({example: 'NovaMorska', description: 'Назва вулиці'})
     @Column({ 
         type: 'varchar', 
-        nullable: false 
     })  
 
     cityName: string;

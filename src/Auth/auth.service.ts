@@ -1,16 +1,13 @@
 import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
-import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { UserEntity } from '../entity/user.entity';
 import { UserDto } from "src/dto/user/user-dto";
-import { toUserDto } from "src/shared/mapper";
 import { LoginUserDto } from "src/dto/user/user-login-dto";
 import { CreateUserDto } from "src/dto/user/user-create-dto";
 import { UserService } from "src/user/user.service";
 import { JwtPayload } from "./jwt.strategy";
-import Role from "src/enum/role.enum";
 
 @Injectable()
 export class AuthService {

@@ -6,21 +6,23 @@ import { BuildingEntity } from "src/entity/building.entity";
 import { CityEntity } from "src/entity/city.entity";
 import { MapEntity } from "src/entity/map.entity";
 import { UserModule } from "src/user/user.module";
-import { CityController } from "./city.controller";
-import { CityService } from "./city.service";
+import { CountryEntity } from "src/entity/country.entity";
+import { CountryController } from "./country.controller";
+import { CountryService } from "./country.service";
+import { CityModule } from "src/city/city.module";
 
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([CityEntity, BuildingEntity, MapEntity]),
+        TypeOrmModule.forFeature([CountryEntity, CityEntity, BuildingEntity, MapEntity]),
+        CityModule,
         BuildingModule,
         AuthModule,
         UserModule
     ],
-    controllers: [CityController],
-    providers: [CityService],
-    exports: [CityService]
+    controllers: [CountryController],
+    providers: [CountryService]
 })
-export class CityModule{
+export class CountryModule{
 
 }

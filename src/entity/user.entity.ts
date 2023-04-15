@@ -9,21 +9,18 @@ export class UserEntity {
   id: number;
     @ApiProperty({example: '1', description: 'Уникальный индетификатор'})
     @Column({ 
-        type: 'varchar', 
-        nullable: false, 
+        type: 'varchar',  
         unique: true 
     }) 
     username: string;
     @ApiProperty({example: 'bim', description: "Ім'я користувача"})
     @Column({ 
         type: 'varchar', 
-        nullable: false 
     }) 
     @ApiProperty({example: '1fdg4', description: 'Пароль користувача'})
     password: string;  
     @Column({ 
         type: 'varchar', 
-        nullable: false 
     }) 
     @ApiProperty({example: 'dgfdg@gmail.com', description: 'Емеіл користувача'}) 
     email: string;

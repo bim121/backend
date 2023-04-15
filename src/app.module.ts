@@ -9,6 +9,7 @@ import { ConfigModule } from "@nestjs/config";
 import * as Joi from '@hapi/joi'
 import { DatabaseModule } from "./database/database.module";
 import { FilesModule } from "./file/file.module";
+import { CountryModule } from "./country/country.module";
 
 @Module({
     imports: [
@@ -36,6 +37,7 @@ import { FilesModule } from "./file/file.module";
         MapModule,
         CityModule,
         FilesModule,
+        CountryModule,
         BuildingModule
       ]
 })

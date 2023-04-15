@@ -42,7 +42,7 @@ export class CityController {
         return this.cityServerice.getOne(id);
     }
 
-    @ApiOperation({summary: 'Пошук міста'})
+    @ApiOperation({summary: 'Пошук карти'})
     @ApiResponse({status: 200})
     @Post('/search')
     searchMap(@Body() dto: SearchMapDto){

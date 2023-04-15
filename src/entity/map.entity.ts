@@ -17,18 +17,15 @@ export class MapEntity {
     @ApiProperty({example: '1', description: 'Поверх будівлі'})
     @Column({ 
         type: 'integer', 
-        nullable: false 
     }) 
     floorNumber: number; 
     @Column({ 
         type: 'varchar', 
-        nullable: false 
     })  
     @ApiProperty({example: '1/3', description: 'Номер кімнати'})
     roomNumber: string;
     @Column({ 
         type: 'varchar', 
-        nullable: false 
     })  
     buildingName: string;
     @ApiProperty({example: 'CityCenter', description: 'Назва будівлі'})
@@ -37,7 +34,6 @@ export class MapEntity {
     () => PublicFile,
     {
       eager: true,
-      nullable: true
     })
     public image?: PublicFile;
     @ManyToOne(type => BuildingEntity, building => building.maps)
