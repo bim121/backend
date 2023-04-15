@@ -10,6 +10,8 @@ import { AuthModule } from "./Auth/auth.module";
 import * as path from 'path'
 import { FileModule } from "./file/file.module";
 import { ConfigModule } from "@nestjs/config";
+import * as Joi from '@hapi/joi'
+import { DatabaseModule } from "./database/database.module";
 
 @Module({
     imports: [
@@ -18,17 +20,17 @@ import { ConfigModule } from "@nestjs/config";
         isGlobal: true
       }),
       ServeStaticModule.forRoot({rootPath: path.resolve(__dirname, 'static')}),
-      TypeOrmModule.forRoot({
-        type: 'postgres',
-        host: process.env.POSTGRES_HOST,
-        port: Number(process.env.POSTGRES_PORT),
-        username: process.env.POSTGRES_USER,
-        password: process.env.POSTGRES_PASSWORD,
-        database: process.env.POSTGRES_DB,
-        entities: entities,
-        synchronize: true,
-        migrationsRun: true,
+      ConfigModule.forRoot({
+        validationSchema: Joi.object({
+          POSTGRES_HOST: Joi.string().required(),
+          POSTGRES_PORT: Joi.number().required(),
+          POSTGRES_USER: Joi.string().required(),
+          POSTGRES_PASSWORD: Joi.string().required(),
+          POSTGRES_DB: Joi.string().required(),
+          PORT: Joi.number(),
+        })
       }),
+        DatabaseModule,
         AuthModule,
         MapModule,
         CityModule,
