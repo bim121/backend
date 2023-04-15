@@ -10,16 +10,21 @@ const start = async() => {
         const PORT = process.env.PORT || 5000;
         const app = await NestFactory.create(AppModule);
 
-        const config = new DocumentBuilder()
+        const configer = new DocumentBuilder()
             .setTitle('backend')
             .setDescription('documentation REST API')
             .setVersion('1.0.0')
             .addTag('Pocket Buddy')
             .build()
-        const document = SwaggerModule.createDocument(app, config)
+        const document = SwaggerModule.createDocument(app, configer)
         SwaggerModule.setup('/api/docs', app, document)
 
-
+        const configService = app.get(ConfigService);
+        config.update({
+            accessKeyId: configService.get('AWS_ACCESS_KEY_ID'),
+            secretAccessKey: configService.get('AWS_SECRET_ACCESS_KEY'),
+            region: configService.get('AWS_REGION'),
+        });
 
         app.enableCors();
 
