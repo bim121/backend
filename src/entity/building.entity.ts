@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, OneToMany, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne } from 'typeorm';
 import { CityEntity } from './city.entity';
 import { MapEntity } from './map.entity';
 import { ApiProperty } from '@nestjs/swagger';

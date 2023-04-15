@@ -32,9 +32,7 @@ export class AuthService {
     }
 
     async login(loginUserDto: LoginUserDto): Promise<LoginStatus> {    
-        const user = await this.usersService.findByLogin(loginUserDto);
-         
-        const username = loginUserDto.username    
+        const user = await this.usersService.findByLogin(loginUserDto);    
         
         const token = this._createToken(user);
         
