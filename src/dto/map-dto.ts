@@ -14,7 +14,4 @@ export class CreateMapDto{
     @IsNotEmpty()
     @ApiProperty({example: 'CityCenter', description: "Назва будівлі"})  
     buildingName:string;
-    @IsNotEmpty() 
-    @ApiProperty({example: 'image/sfdg.png', description: "Зображення карти"})  
-    picture: string;
 }

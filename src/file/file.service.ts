@@ -1,33 +1,44 @@
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import * as path from 'path';
-import * as fs from 'fs';
-import * as uuid from 'uuid';
-
-export enum FileType{
-    AUDIO = 'audio',
-    IMAGE = 'image'
-}
-
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { S3 } from 'aws-sdk';
+import { ConfigService } from '@nestjs/config';
+import { v4 as uuid } from 'uuid';
+import PublicFile from 'src/entity/publicFile.entity';
+ 
 @Injectable()
-export class FileService{
-    
-    createFile(type: FileType, file): string{
-        try{
-            const fileExtension = file.originalname.split('.').pop();
-            const fileName = uuid.v4() + '.' + fileExtension;
-            const filePath = path.resolve(__dirname, '..', 'static', type);
-            if(!fs.existsSync(filePath)){
-                fs.mkdirSync(filePath, {recursive: true});
-            }
-            fs.writeFileSync(path.resolve(filePath, fileName), file.buffer);
-            return type + '/' + fileName;
-        } catch(e){
-            throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+export class FilesService {
+  constructor(
+    @InjectRepository(PublicFile)
+    private publicFilesRepository: Repository<PublicFile>,
+    private readonly configService: ConfigService
+  ) {}
+ 
+  async uploadPublicFile(dataBuffer: Buffer, filename: string) {
+    const s3 = new S3();
+    const uploadResult = await s3.upload({
+      Bucket: this.configService.get('AWS_PUBLIC_BUCKET_NAME'),
+      Body: dataBuffer,
+      Key: `${uuid()}-${filename}`
+    })
+      .promise();
+ 
+    const newFile = this.publicFilesRepository.create({
+      key: uploadResult.Key,
+      url: uploadResult.Location
+    });
+    await this.publicFilesRepository.save(newFile);
+    return newFile;
+  }
 
-    removeFile(fileName: string){
-        
-    }
-
+  async deletePublicFile(fileId: number) {
+    const id = fileId;
+    const file = await this.publicFilesRepository.findOneBy({ id });
+    const s3 = new S3();
+    await s3.deleteObject({
+      Bucket: this.configService.get('AWS_PUBLIC_BUCKET_NAME'),
+      Key: file.key,
+    }).promise();
+    await this.publicFilesRepository.delete(fileId);
+  }
 }

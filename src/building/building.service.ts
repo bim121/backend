@@ -4,7 +4,6 @@ import { CreateBuildingDto } from "src/dto/building-dto";
 import { CreateMapDto } from "src/dto/map-dto";
 import { BuildingEntity } from "src/entity/building.entity";
 import { MapEntity } from "src/entity/map.entity";
-import { FileService } from "src/file/file.service";
 import { MapService } from "src/map/map.service";
 import { Repository } from "typeorm";
 
@@ -13,8 +12,7 @@ export class BuildingService {
     constructor(
         @InjectRepository(BuildingEntity)    
         private readonly buildingRepo: Repository<BuildingEntity>, 
-        @InjectRepository(MapEntity) private readonly mapRepo: Repository<MapEntity>, private readonly mapService: MapService,
-        private fileService: FileService) {}
+        @InjectRepository(MapEntity) private readonly mapRepo: Repository<MapEntity>, private readonly mapService: MapService) {}
 
     async createBuilding(buildingDto: CreateBuildingDto): Promise<BuildingEntity> {    
         const { description, buildingName, streetName, cityName } = buildingDto;
@@ -36,8 +34,8 @@ export class BuildingService {
         return this.buildingRepo.find();
     }
 
-    async addMap(dto: CreateMapDto, picture): Promise<BuildingEntity> {
-        const map = await this.mapService.createMap(dto, picture);
+    async addMap(dto: CreateMapDto, imageBuffer: Buffer, filename: string): Promise<BuildingEntity> {
+        const map = await this.mapService.createMap(dto, imageBuffer, filename);
         const buildingName =  map.buildingName;
         const building = await this.buildingRepo.findOne( {where: { buildingName} });
         map.building = building;

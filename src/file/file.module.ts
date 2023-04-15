@@ -1,8 +1,16 @@
-import {Module} from "@nestjs/common";
-import { FileService } from "./file.service";
+import { Module } from "@nestjs/common";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import PublicFile from "src/entity/publicFile.entity";
+import { FilesService } from "./file.service";
+
 
 @Module({
-    providers: [FileService]
+    imports: [
+        TypeOrmModule.forFeature([PublicFile]),
+    ],
+    providers: [FilesService],
+    exports: [FilesService]
 })
-
-export class FileModule{}
+export class FilesModule{
+    
+}

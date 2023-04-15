@@ -1,17 +1,14 @@
 import { Module } from "@nestjs/common";
-import { MongooseModule } from '@nestjs/mongoose';
 import { MapModule } from "./map/map.module";
 import { CityModule } from "./city/city.module";
 import { BuildingModule } from "./building/building.module";
 import { ServeStaticModule } from "@nestjs/serve-static";
-import {TypeOrmModule} from '@nestjs/typeorm';
-import entities from './typeorm/entities';
 import { AuthModule } from "./Auth/auth.module";
 import * as path from 'path'
-import { FileModule } from "./file/file.module";
 import { ConfigModule } from "@nestjs/config";
 import * as Joi from '@hapi/joi'
 import { DatabaseModule } from "./database/database.module";
+import { FilesModule } from "./file/file.module";
 
 @Module({
     imports: [
@@ -38,7 +35,7 @@ import { DatabaseModule } from "./database/database.module";
         AuthModule,
         MapModule,
         CityModule,
-        FileModule,
+        FilesModule,
         BuildingModule
       ]
 })
