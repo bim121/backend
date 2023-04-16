@@ -27,14 +27,14 @@ export class CountryController {
     @ApiOperation({summary: 'Отримання інформації про всі країни'})
     @ApiResponse({status: 200})
     @Get()
-    getAll(){
+    async getAll(){
         return this.countryServerice.getAll();
     }
 
     @ApiOperation({summary: 'Отримання інформації про певну країну'})
     @ApiResponse({status: 200})
     @Get(':id')
-    getOne(@Param('id') id: string){
+    async getOne(@Param('id') id: string){
         return this.countryServerice.getOne(id);
     }
     @ApiOperation({summary: 'Видалення певної країни'})

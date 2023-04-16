@@ -31,21 +31,21 @@ export class CityController {
     @ApiOperation({summary: 'Отримання інформації про всі міста'})
     @ApiResponse({status: 200})
     @Get()
-    getAll(){
+    async getAll(){
         return this.cityServerice.getAll();
     }
 
     @ApiOperation({summary: 'Отримання інформації про певне місто'})
     @ApiResponse({status: 200})
     @Get(':id')
-    getOne(@Param('id') id: string){
+    async getOne(@Param('id') id: string){
         return this.cityServerice.getOne(id);
     }
 
     @ApiOperation({summary: 'Пошук карти'})
     @ApiResponse({status: 200})
     @Post('/search')
-    searchMap(@Body() dto: SearchMapDto){
+    async searchMap(@Body() dto: SearchMapDto){
         return this.cityServerice.searchMap(dto);
     }
 

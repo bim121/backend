@@ -28,7 +28,7 @@ export class AuthController {
         }
 
         @Get(':id')
-        getOne(@Param('id') id: number){
+        async getOne(@Param('id') id: number){
             return this.authService.getOne(id);
         }
     

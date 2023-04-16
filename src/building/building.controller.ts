@@ -10,7 +10,7 @@ import { Express } from 'express';
 
 @Controller('/building')
 export class BuildingController {
-    constructor(private readonly buildingServerice: BuildingService, private readonly mapService: MapService) { }
+    constructor(private readonly buildingServerice: BuildingService) { }
 
     @ApiOperation({summary: 'Додавання будівлі'})
     @ApiResponse({status: 200})
@@ -30,7 +30,7 @@ export class BuildingController {
     @ApiOperation({summary: 'Отримання інфомації про всі будівлі'})
     @ApiResponse({status: 200})
     @Get()
-    getAll(){
+    async getAll(){
         return this.buildingServerice.getAll();
     }
 
