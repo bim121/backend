@@ -3,8 +3,6 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { CreateMapDto } from "src/dto/map-dto";
 import { MapService } from "./map.service";
 import { ApiOperation, ApiResponse } from "@nestjs/swagger";
-import axios from "axios";
-
 
 @Controller('/map')
 export class MapController {
@@ -15,13 +13,7 @@ export class MapController {
     @Post('/add')
     @UseInterceptors(FileInterceptor('file'))
     async addMap(@UploadedFile() file: Express.Multer.File, @Body() dto: CreateMapDto) {
-        const map = await this.mapServerice.createMap(dto, file.buffer, file.originalname);
-
-        await axios.post('https://webhook.site/e19cb110-84eb-464c-a742-7f9bf9b8a5d9', {
-            event: 'map.created',
-            data: map,
-        });
-        return map;
+       return await this.mapServerice.createMap(dto, file.buffer, file.originalname);
     }
 
     @ApiOperation({summary: 'Отримання усіх мап'})

@@ -1,6 +1,7 @@
 import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CreateMapDto } from "src/dto/map-dto";
+import { HttpService } from '@nestjs/axios';
 import { MapEntity } from "src/entity/map.entity";
 import { FilesService } from "src/file/file.service";
 import { Repository } from "typeorm";
@@ -10,7 +11,8 @@ export class MapService {
     constructor(
         @InjectRepository(MapEntity)    
         private readonly mapRepo: Repository<MapEntity>,
-        private readonly filesService: FilesService ) {}
+        private readonly filesService: FilesService,
+        private readonly httpService: HttpService ) {}
 
     async createMap(mapDto: CreateMapDto,  imageBuffer: Buffer, filename: string): Promise<MapEntity> {    
         const {  name, floorNumber, roomNumber, buildingName} = mapDto;
@@ -31,6 +33,12 @@ export class MapService {
             image
         });
         await this.mapRepo.save(map);
+
+        await this.httpService.post('https://webhook.site/e19cb110-84eb-464c-a742-7f9bf9b8a5d9', {
+            event: 'map.created',
+            data: map,
+        });
+
         return map;  
     }
 
