@@ -16,7 +16,7 @@ export class CityController {
     @ApiOperation({summary: 'Додавання міста'})
     @ApiResponse({status: 200})
     @Post('/add')
-    @UseGuards(RoleGuard(Role.User))
+    @UseGuards(RoleGuard([Role.Admin]))
     async addCity(@Body() dto: CreateCityDto) {
         return this.cityServerice.createCity(dto);
     }
@@ -24,6 +24,7 @@ export class CityController {
     @ApiOperation({summary: 'Додавання будівлі міста'})
     @ApiResponse({status: 200})
     @Post('/building')
+    @UseGuards(RoleGuard([Role.User, Role.Admin]))
     async addBuilding(@Body() dto: CreateBuildingDto) {
         return this.cityServerice.addBuilding(dto);
     }

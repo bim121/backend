@@ -12,4 +12,7 @@ export class CreateUserDto {
   @IsEmail()
   @ApiProperty({example: 'gfhgdg@gmail.com', description: "Email користувача"})
   email: string;
+  @IsEmail()
+  @ApiProperty({example: 'admin', description: "Ролі"})
+  role: string;
 }

@@ -41,8 +41,8 @@ export class AuthService {
         };  
     }
     
-    private _createToken({ username }: UserDto): any { //refactor any to interface
-        const user: JwtPayload = { username};    
+    private _createToken({ username, roles }: UserDto): any { //refactor any to interface
+        const user: JwtPayload = { username, roles};    
         const accessToken = this.jwtService.sign(user);    
         return {
             expiresIn: '1800s',

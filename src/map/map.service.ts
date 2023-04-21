@@ -1,10 +1,11 @@
-import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
+import { Injectable, HttpException, HttpStatus, ForbiddenException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CreateMapDto } from "src/dto/map-dto";
 import { HttpService } from '@nestjs/axios';
 import { MapEntity } from "src/entity/map.entity";
 import { FilesService } from "src/file/file.service";
 import { Repository } from "typeorm";
+import { map, catchError, lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class MapService {
@@ -25,21 +26,39 @@ export class MapService {
             throw new HttpException('Map already exists', HttpStatus.BAD_REQUEST);    
         }
 
-        const map: MapEntity = await this.mapRepo.create({ name, floorNumber, roomNumber, buildingName});
-        await this.mapRepo.save(map);
+        const mapObject: MapEntity = await this.mapRepo.create({ name, floorNumber, roomNumber, buildingName});
+        await this.mapRepo.save(mapObject);
         const image = await this.filesService.uploadPublicFile(imageBuffer, filename);
-        await this.mapRepo.update(map, {
+        await this.mapRepo.update(mapObject, {
             ...map,
             image
         });
-        await this.mapRepo.save(map);
+        await this.mapRepo.save(mapObject);
+        
+        console.log("before http request");
 
-        await this.httpService.post('https://webhook.site/e19cb110-84eb-464c-a742-7f9bf9b8a5d9', {
-            event: 'map.created',
-            data: map,
-        });
+        const request = this.httpService.post('https://webhook.site/e19cb110-84eb-464c-a742-7f9bf9b8a5d9', {
+            data: mapObject,
+            event: "map.created"
+        })
+        .pipe(
+            catchError(() => {
+            throw new ForbiddenException('API not available');
+            }),
+        );
 
-        return map;  
+    //     const request = this.httpService
+    //     .get('http://localhost:3000')
+    //     .pipe(map((res) => res.data))
+    //     .pipe(
+    //     catchError(() => {
+    //         throw new ForbiddenException('API not available');
+    //    }),
+    //  );
+
+     const fact = await lastValueFrom(request);
+     console.log(fact)
+     return mapObject;  
     }
 
     async getAll(): Promise<MapEntity[]> {
