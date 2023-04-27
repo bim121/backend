@@ -1,18 +1,18 @@
-import { Injectable, HttpException, HttpStatus, ForbiddenException } from "@nestjs/common";
+import { Injectable, HttpException, HttpStatus, ForbiddenException, Inject } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CreateMapDto } from "src/dto/map-dto";
 import { HttpService } from '@nestjs/axios';
 import { MapEntity } from "src/entity/map.entity";
-import { FilesService } from "src/file/file.service";
 import { Repository } from "typeorm";
 import { map, catchError, lastValueFrom } from 'rxjs';
+import { ClientProxy } from "@nestjs/microservices";
 
 @Injectable()
 export class MapService {
     constructor(
         @InjectRepository(MapEntity)    
         private readonly mapRepo: Repository<MapEntity>,
-        private readonly filesService: FilesService,
+        @Inject('FILES_SERVICE') private filesService: ClientProxy,
         private readonly httpService: HttpService ) {}
 
     async createMap(mapDto: CreateMapDto,  imageBuffer: Buffer, filename: string): Promise<MapEntity> {    
@@ -28,14 +28,22 @@ export class MapService {
 
         const mapObject: MapEntity = await this.mapRepo.create({ name, floorNumber, roomNumber, buildingName});
         await this.mapRepo.save(mapObject);
-        const image = await this.filesService.uploadPublicFile(imageBuffer, filename);
+
+        const json = JSON.stringify({
+            buffer: imageBuffer.toString('base64')
+          });
+
+        const image = await this.filesService.send({
+            cmd: 'upload-files'
+          }, {json, filename}).toPromise();
+
+        
+
         await this.mapRepo.update(mapObject, {
             ...map,
             image
         });
         await this.mapRepo.save(mapObject);
-        
-        console.log("before http request");
 
         const request = this.httpService.post('https://webhook.site/e19cb110-84eb-464c-a742-7f9bf9b8a5d9', {
             data: mapObject,
@@ -57,7 +65,6 @@ export class MapService {
     //  );
 
      const fact = await lastValueFrom(request);
-     console.log(fact)
      return mapObject;  
     }
 
@@ -70,15 +77,6 @@ export class MapService {
     }
 
     async delete(id: number): Promise<void> {
-        const map = await this.mapRepo.findOneBy({ id });
-        const fileId = map.image?.id;
-        await this.mapRepo.delete({id});
-        if (fileId) {
-            await this.mapRepo.update(id, {
-              ...map,
-              image: null
-            });
-        }
-        await this.filesService.deletePublicFile(fileId);
+        this.mapRepo.delete({ id });
     }
 }

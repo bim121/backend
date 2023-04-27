@@ -5,12 +5,23 @@ import { MapController } from "./map.controller";
 import { MapService } from "./map.service";
 import { FilesModule } from "src/file/file.module";
 import { HttpModule } from "@nestjs/axios";
+import { ClientsModule, Transport } from "@nestjs/microservices";
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([MapEntity]),
         FilesModule,
-        HttpModule
+        HttpModule,
+        ClientsModule.register([
+            {
+              name: 'FILES_SERVICE',
+              transport: Transport.TCP,
+              options: {
+                host: 'localhost',
+                port: 5001,
+              },
+            },
+          ]),
     ],
     controllers: [MapController],
     providers: [MapService],

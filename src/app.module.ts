@@ -32,7 +32,9 @@ import { CountryModule } from "./country/country.module";
           AWS_PUBLIC_BUCKET_NAME: Joi.string().required(),
           WEBHOOK_URL: Joi.string().required(),
           JWT_SECRET: Joi.string().required(),
-          JWT_EXPIRATION_TIME: Joi.string().required()
+          JWT_EXPIRATION_TIME: Joi.string().required(),
+          FILES_SERVICE_HOST: Joi.string().required(),
+          FILES_SERVICE_PORT: Joi.string().required(),
         })
       }),
         DatabaseModule,

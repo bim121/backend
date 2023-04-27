@@ -1,16 +1,24 @@
-import { Module } from "@nestjs/common";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import PublicFile from "src/entity/publicFile.entity";
-import { FilesService } from "./file.service";
-
-
+import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ClientProxyFactory, Transport } from '@nestjs/microservices';
+ 
 @Module({
-    imports: [
-        TypeOrmModule.forFeature([PublicFile]),
-    ],
-    providers: [FilesService],
-    exports: [FilesService]
+  imports: [ConfigModule],
+  controllers: [],
+  providers: [
+    {
+      provide: 'FILES_SERVICE',
+      useFactory: (configService: ConfigService) => (
+        ClientProxyFactory.create({
+          transport: Transport.TCP,
+          options: {
+            host: configService.get('FILES_SERVICE_HOST'),
+            port: configService.get('FILES_SERVICE_PORT'),
+          }
+        })
+      ),
+      inject: [ConfigService],
+    }
+  ],
 })
-export class FilesModule{
-    
-}
+export class FilesModule {}
