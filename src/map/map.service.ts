@@ -45,7 +45,7 @@ export class MapService {
         });
         await this.mapRepo.save(mapObject);
 
-        const request = this.httpService.post('https://webhook.site/e19cb110-84eb-464c-a742-7f9bf9b8a5d9', {
+        const request = this.httpService.post('https://webhook.site/575fcb15-6763-47ca-b875-0d419d7117aa', {
             data: mapObject,
             event: "map.created"
         })

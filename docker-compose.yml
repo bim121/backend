@@ -42,7 +42,7 @@ services:
       - "5672:5672"
       - "15672:15672"
     env_file:
-      - ./rabbitmq.env
+      - .env
   postgres:
     container_name: postgres
     image: postgres:12
