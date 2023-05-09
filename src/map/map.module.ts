@@ -15,13 +15,16 @@ import { ClientsModule, Transport } from "@nestjs/microservices";
         ClientsModule.register([
             {
               name: 'FILES_SERVICE',
-              transport: Transport.TCP,
+              transport: Transport.RMQ,
               options: {
-                host: 'localhost',
-                port: 5001,
+                urls: [`amqp://guest:guest@localhost:5672`],
+                queue: 'email-files',
+                queueOptions: {
+                    durable: true,
+                },
               },
             },
-          ]),
+          ])
     ],
     controllers: [MapController],
     providers: [MapService],

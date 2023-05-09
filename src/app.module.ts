@@ -33,8 +33,10 @@ import { CountryModule } from "./country/country.module";
           WEBHOOK_URL: Joi.string().required(),
           JWT_SECRET: Joi.string().required(),
           JWT_EXPIRATION_TIME: Joi.string().required(),
-          FILES_SERVICE_HOST: Joi.string().required(),
-          FILES_SERVICE_PORT: Joi.string().required(),
+          RABBITMQ_USER: Joi.string().required(),
+          RABBITMQ_PASSWORD: Joi.string().required(),
+          RABBITMQ_HOST: Joi.string().required(),
+          RABBITMQ_QUEUE_NAME: Joi.string().required(),
         })
       }),
         DatabaseModule,
