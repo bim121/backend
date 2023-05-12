@@ -37,6 +37,10 @@ export class MapService {
             cmd: 'upload-files'
           }, {json, filename}).toPromise();
 
+        if(!image){
+            throw new HttpException('Bad exception for rabbitmq', HttpStatus.BAD_REQUEST); 
+        }
+
         
 
         await this.mapRepo.update(mapObject, {
