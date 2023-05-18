@@ -9,6 +9,7 @@ import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from "src/dto/user/user-create-dto";
 import { JwtPayload } from "src/Auth/jwt.strategy";
 import Role from "src/enum/role.enum";
+import { where } from "sequelize";
 
 @Injectable()
 export class UserService {
@@ -19,6 +20,11 @@ export class UserService {
     async findOne(options?: object): Promise<UserDto> {
         const user =  await this.userRepo.findOne(options);    
         return toUserDto(user);  
+    }
+
+    async getByUsername(username: string): Promise<UserEntity> {
+        const user =  await this.userRepo.findOne({where: {username}});    
+        return user;  
     }
    
     async findByLogin({ username, password }: LoginUserDto): Promise<UserDto> {    

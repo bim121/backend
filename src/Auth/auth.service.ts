@@ -8,13 +8,25 @@ import { LoginUserDto } from "src/dto/user/user-login-dto";
 import { CreateUserDto } from "src/dto/user/user-create-dto";
 import { UserService } from "src/user/user.service";
 import { JwtPayload } from "./jwt.strategy";
+import { TokenPayload } from "src/interface/TokenPaylaod.interface";
+import { ConfigService } from "@nestjs/config";
 
 @Injectable()
 export class AuthService {
     constructor(private readonly usersService: UserService, private readonly jwtService: JwtService,   @InjectRepository(UserEntity)    
-    private readonly userRepo: Repository<UserEntity>) {
+    private readonly userRepo: Repository<UserEntity>,  private readonly configService: ConfigService) {
         
     }
+    
+    public async getUserFromAuthenticationToken(token: string) {
+        const payload: TokenPayload = this.jwtService.verify(token, {
+          secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET')
+        });
+        if (payload.username) {
+          return this.usersService.getByUsername(payload.username);
+        }
+      }
+
     async register(userDto: CreateUserDto): Promise<RegistrationStatus> {
         let status: RegistrationStatus = {
             success: true,   
@@ -41,7 +53,7 @@ export class AuthService {
         };  
     }
     
-    private _createToken({ username, roles }: UserDto): any { //refactor any to interface
+    private _createToken({ username, roles }: UserDto): any { 
         const user: JwtPayload = { username, roles};    
         const accessToken = this.jwtService.sign(user);    
         return {
