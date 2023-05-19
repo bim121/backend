@@ -1,5 +1,6 @@
 import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { ChatGateway } from "src/Gateway/chat.gateway";
 import { CreateBuildingDto } from "src/dto/building-dto";
 import { CreateMapDto } from "src/dto/map-dto";
 import { BuildingEntity } from "src/entity/building.entity";
@@ -12,7 +13,8 @@ export class BuildingService {
     constructor(
         @InjectRepository(BuildingEntity)    
         private readonly buildingRepo: Repository<BuildingEntity>, 
-        @InjectRepository(MapEntity) private readonly mapRepo: Repository<MapEntity>, private readonly mapService: MapService) {}
+        @InjectRepository(MapEntity) private readonly mapRepo: Repository<MapEntity>, private readonly mapService: MapService,
+        private readonly chatGateway: ChatGateway) {}
 
     async createBuilding(buildingDto: CreateBuildingDto): Promise<BuildingEntity> {    
         const { description, buildingName, streetName, cityName } = buildingDto;
@@ -27,6 +29,7 @@ export class BuildingService {
         
         const building: BuildingEntity = await this.buildingRepo.create({ description, buildingName, streetName, cityName });
         await this.buildingRepo.save(building);
+        this.chatGateway.sendInfo("building with name: " + buildingName + ", street name: " + streetName + ", city name: " + cityName + " and description: " + description);
         return building;  
     }
 

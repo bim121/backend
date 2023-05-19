@@ -1,5 +1,6 @@
 import { Injectable, HttpException, HttpStatus, UseGuards } from "@nestjs/common";;
 import { InjectRepository } from "@nestjs/typeorm";
+import { ChatGateway } from "src/Gateway/chat.gateway";
 import { BuildingService } from "src/building/building.service";
 import { CityService } from "src/city/city.service";
 import { CreateCityDto } from "src/dto/city-dto";
@@ -14,7 +15,8 @@ export class CountryService {
         @InjectRepository(CityEntity) private readonly cityRepo: Repository<CityEntity>, 
         @InjectRepository(CountryEntity) private readonly countryRepo: Repository<CountryEntity>, 
          private readonly buildingService: BuildingService, 
-        private readonly cityService: CityService) {}
+        private readonly cityService: CityService,
+        private readonly chatGateway: ChatGateway) {}
 
     async createCountry(countryDto: CreateCountryDto): Promise<CreateCountryDto> {    
         const { description, countryName, location } = countryDto;
@@ -29,6 +31,7 @@ export class CountryService {
         
         const country: CountryEntity = await this.countryRepo.create({ description, countryName, location });
         await this.countryRepo.save(country);
+        this.chatGateway.sendInfo("country with name: " + countryName + ", location: " + location + " and description: " + description);
         return country;  
     }
 

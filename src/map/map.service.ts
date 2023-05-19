@@ -6,6 +6,7 @@ import { MapEntity } from "src/entity/map.entity";
 import { Repository } from "typeorm";
 import { map, catchError, lastValueFrom } from 'rxjs';
 import { ClientProxy } from "@nestjs/microservices";
+import { ChatGateway } from "src/Gateway/chat.gateway";
 
 @Injectable()
 export class MapService {
@@ -13,7 +14,8 @@ export class MapService {
         @InjectRepository(MapEntity)    
         private readonly mapRepo: Repository<MapEntity>,
         @Inject('FILES_SERVICE') private filesService: ClientProxy,
-        private readonly httpService: HttpService ) {}
+        private readonly httpService: HttpService,
+        private readonly chatGateway: ChatGateway ) {}
 
     async createMap(mapDto: CreateMapDto,  imageBuffer: Buffer, filename: string): Promise<MapEntity> {    
         const {  name, floorNumber, roomNumber, buildingName} = mapDto;
@@ -67,6 +69,8 @@ export class MapService {
     //         throw new ForbiddenException('API not available');
     //    }),
     //  );
+
+    this.chatGateway.sendInfo("map with name: " + name + ", floor number: " + floorNumber + ", room number: " + roomNumber);
 
      const fact = await lastValueFrom(request);
      return mapObject;  

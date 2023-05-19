@@ -10,6 +10,7 @@ import * as Joi from '@hapi/joi'
 import { DatabaseModule } from "./database/database.module";
 import { FilesModule } from "./file/file.module";
 import { CountryModule } from "./country/country.module";
+import { ChatModule } from "./Gateway/chat.module";
 
 @Module({
     imports: [
@@ -45,7 +46,8 @@ import { CountryModule } from "./country/country.module";
         CityModule,
         FilesModule,
         CountryModule,
-        BuildingModule
+        BuildingModule,
+        ChatModule
       ]
 })
 export class AppModule{

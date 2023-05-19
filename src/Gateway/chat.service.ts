@@ -17,28 +17,10 @@ export class ChatService {
   ) {
   }
  
-  async saveMessage(content: string, author: UserEntity) {
+  async saveMessage(content: string) {
     const newMessage = await this.messagesRepository.create({
       content,
-      author
     });
     await this.messagesRepository.save(newMessage);
-    return newMessage;
-  }
- 
-  async getAllMessages() {
-    return this.messagesRepository.find({
-      relations: ['author']
-    });
-  }
-
-  async getUserFromSocket(socket: Socket) {
-    const cookie = socket.handshake.headers.cookie;
-    const { Authentication: authenticationToken } = parse(cookie);
-    const user = await this.authService.getUserFromAuthenticationToken(authenticationToken);
-    if (!user) {
-      throw new WsException('Invalid credentials.');
-    }
-    return user;
   }
 }

@@ -8,6 +8,7 @@ import { MapEntity } from "src/entity/map.entity";
 import { UserModule } from "src/user/user.module";
 import { CityController } from "./city.controller";
 import { CityService } from "./city.service";
+import { ChatModule } from "src/Gateway/chat.module";
 
 
 @Module({
@@ -15,7 +16,8 @@ import { CityService } from "./city.service";
         TypeOrmModule.forFeature([CityEntity, BuildingEntity, MapEntity]),
         BuildingModule,
         AuthModule,
-        UserModule
+        UserModule,
+        ChatModule,
     ],
     controllers: [CityController],
     providers: [CityService],

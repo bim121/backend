@@ -10,6 +10,7 @@ import { CountryEntity } from "src/entity/country.entity";
 import { CountryController } from "./country.controller";
 import { CountryService } from "./country.service";
 import { CityModule } from "src/city/city.module";
+import { ChatModule } from "src/Gateway/chat.module";
 
 
 @Module({
@@ -18,7 +19,8 @@ import { CityModule } from "src/city/city.module";
         CityModule,
         BuildingModule,
         AuthModule,
-        UserModule
+        UserModule,
+        ChatModule
     ],
     controllers: [CountryController],
     providers: [CountryService]

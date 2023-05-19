@@ -6,12 +6,14 @@ import { MapService } from "./map.service";
 import { FilesModule } from "src/file/file.module";
 import { HttpModule } from "@nestjs/axios";
 import { ClientsModule, Transport } from "@nestjs/microservices";
+import { ChatModule } from "src/Gateway/chat.module";
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([MapEntity]),
         FilesModule,
         HttpModule,
+        ChatModule,
         ClientsModule.register([
             {
               name: 'FILES_SERVICE',

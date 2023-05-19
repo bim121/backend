@@ -5,11 +5,13 @@ import { MapEntity } from "src/entity/map.entity";
 import { MapModule } from "src/map/map.module";
 import { BuildingController } from "./building.controller";
 import { BuildingService } from "./building.service";
+import { ChatModule } from "src/Gateway/chat.module";
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([BuildingEntity, MapEntity]),
-        MapModule
+        MapModule,
+        ChatModule
     ],
     controllers: [BuildingController],
     providers: [BuildingService],

@@ -8,9 +8,6 @@ class MessageEntity {
  
   @Column()
   public content: string;
- 
-  @ManyToOne(() => UserEntity)
-  public author: UserEntity;
 }
  
 export default MessageEntity;
