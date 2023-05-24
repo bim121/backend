@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get,  Param, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get,  Param, Post, Query } from "@nestjs/common";
 import { CreateCityDto } from "src/dto/city-dto";
 import { ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { CityService } from "src/city/city.service";
@@ -8,6 +8,7 @@ import { CountryService } from "./country.service";
 
 @Controller('/country')
 export class CountryController {
+    countyService: any;
     constructor(private readonly countryServerice: CountryService, private readonly cityService: CityService) { }
 
     @ApiOperation({summary: 'Додавання країни'})
@@ -16,6 +17,14 @@ export class CountryController {
     async addCountry(@Body() dto: CreateCountryDto) {
         return this.countryServerice.createCountry(dto);
     }
+
+    @Get()
+    async getPosts(@Query('search') search: string) {
+    if (search) {
+      return this.countryServerice.searchForCountry(search);
+    }
+    return this.countryServerice.getAll();
+  }
 
     @ApiOperation({summary: 'Додавання країни'})
     @ApiResponse({status: 200})

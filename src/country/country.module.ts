@@ -11,6 +11,7 @@ import { CountryController } from "./country.controller";
 import { CountryService } from "./country.service";
 import { CityModule } from "src/city/city.module";
 import { ChatModule } from "src/Gateway/chat.module";
+import { SearchModule } from "src/search/search.module";
 
 
 @Module({
@@ -20,7 +21,8 @@ import { ChatModule } from "src/Gateway/chat.module";
         BuildingModule,
         AuthModule,
         UserModule,
-        ChatModule
+        ChatModule,
+        SearchModule
     ],
     controllers: [CountryController],
     providers: [CountryService]

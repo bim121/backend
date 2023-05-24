@@ -11,6 +11,7 @@ import { DatabaseModule } from "./database/database.module";
 import { FilesModule } from "./file/file.module";
 import { CountryModule } from "./country/country.module";
 import { ChatModule } from "./Gateway/chat.module";
+import { SearchModule } from "./search/search.module";
 
 @Module({
     imports: [
@@ -38,9 +39,13 @@ import { ChatModule } from "./Gateway/chat.module";
           RABBITMQ_PASSWORD: Joi.string().required(),
           RABBITMQ_HOST: Joi.string().required(),
           RABBITMQ_QUEUE_NAME: Joi.string().required(),
+          ELASTICSEARCH_NODE: Joi.string().required(),
+          ELASTICSEARCH_USERNAME: Joi.string().required(),
+          ELASTICSEARCH_PASSWORD: Joi.string().required(),
         })
       }),
         DatabaseModule,
+        SearchModule,
         AuthModule,
         MapModule,
         CityModule,

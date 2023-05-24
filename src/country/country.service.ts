@@ -8,6 +8,8 @@ import { CreateCountryDto } from "src/dto/country-dto";
 import { CityEntity } from "src/entity/city.entity";
 import { CountryEntity } from "src/entity/country.entity";
 import { Repository } from "typeorm/repository/Repository";
+import CountrySearchService from "./countrySearch.service";
+import { In } from "typeorm";
 
 @Injectable()
 export class CountryService {
@@ -16,7 +18,8 @@ export class CountryService {
         @InjectRepository(CountryEntity) private readonly countryRepo: Repository<CountryEntity>, 
          private readonly buildingService: BuildingService, 
         private readonly cityService: CityService,
-        private readonly chatGateway: ChatGateway) {}
+        private readonly chatGateway: ChatGateway,
+        private countrySearchService: CountrySearchService) {}
 
     async createCountry(countryDto: CreateCountryDto): Promise<CreateCountryDto> {    
         const { description, countryName, location } = countryDto;
@@ -32,8 +35,21 @@ export class CountryService {
         const country: CountryEntity = await this.countryRepo.create({ description, countryName, location });
         await this.countryRepo.save(country);
         this.chatGateway.sendInfo("country with name: " + countryName + ", location: " + location + " and description: " + description);
+        this.countrySearchService.indexCountry(country);
         return country;  
     }
+
+    async searchForCountry(text: string) {
+        const results = await this.countrySearchService.search(text);
+        const ids = results;
+        if (!ids.length) {
+          return [];
+        }
+        return this.countryRepo
+          .find({
+            where: { id: In(ids) }
+          });
+      }
 
     async getAll(): Promise<CountryEntity[]> {
         return this.countryRepo.find();
